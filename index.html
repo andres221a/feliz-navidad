@@ -1,47 +1,119 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Feliz Navidad ❤️</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Feliz Navidad ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: linear-gradient(180deg, #0b3d2e, #1e8449);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Segoe UI', sans-serif;
-    overflow: hidden;
-}
+    <!-- Fuente bonita -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
-/* Tarjeta central */
-.card {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 25px;
-    padding: 25px 20px 30px;
-    width: 90%;
-    max-width: 350px;
-    text-align: center;
-    color: #fff;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    z-index: 2;
-    animation: fadeIn 1.5s ease;
-}
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        body {
+            background: linear-gradient(180deg, #0f5132, #198754);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
 
-.card h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
+        .card {
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(6px);
+            z-index: 2;
+        }
 
-.card p {
+        .card h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
 
+        .card p {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
 
+        .card img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+
+        /* Nieve */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+    </style>
+</head>
+<body onclick="mostrarMensaje()">
+
+    <!-- Música -->
+    <audio autoplay loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-christmas.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="card">
+        <h1>Feliz Navidad 🎄</h1>
+        <p>Para mi gordita preciosa ❤️</p>
+
+        <!-- CAMBIA EL NOMBRE SI ES NECESARIO -->
+        <img src="foto.jpeg" alt="Nuestra foto">
+
+        <p>Toca la pantalla ✨</p>
+    </div>
+
+    <script>
+        // Mensaje sorpresa
+        function mostrarMensaje() {
+            alert("Mi gordita 💖 te deseo una feliz Navidad 🎄\n\nRecuerda siempre que te amo muchisimoooo 😍\nMi princesa de lindos ojitos ❤️");
+        }
+
+        // Crear nieve
+        function crearNieve() {
+            const snowflake = document.createElement("div");
+            snowflake.className = "snowflake";
+            snowflake.innerHTML = "❄";
+            snowflake.style.left = Math.random() * 100 + "vw";
+            snowflake.style.animationDuration = (Math.random() * 3 + 2) + "s";
+            snowflake.style.fontSize = (Math.random() * 10 + 10) + "px";
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        setInterval(crearNieve, 200);
+    </script>
+
+</body>
+</html>
