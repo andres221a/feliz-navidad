@@ -7,80 +7,208 @@
 
 <style>
 body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(#0b3d2e, #145a32);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    font-family: 'Arial', sans-serif;
-    color: white;
-    text-align: center;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #b30000, #1a8f3a);
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  color: white;
+  text-align: center;
 }
 
 .container {
-    z-index: 2;
+  position: relative;
+  z-index: 2;
+  padding: 20px;
 }
 
-.photo {
-    width: 220px;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.6);
+h1 {
+  font-size: 2.3em;
+  margin-bottom: 10px;
 }
 
-.tap {
-    margin-top: 15px;
-    font-size: 18px;
-    opacity: 0.9;
+p {
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.footer {
+  margin-top: 25px;
+  font-size: 1.2em;
+}
+
+.heart {
+  animation: latido 1.5s infinite;
+}
+
+@keyframes latido {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 /* Nieve */
 .snow {
-    position: fixed;
-    top: -10px;
-    color: white;
-    font-size: 1em;
-    animation: fall linear infinite;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes fall {
-    to {
-        transform: translateY(110vh);
-    }
+/* Mensaje sorpresa */
+#sorpresa {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  padding: 20px;
+}
+
+#sorpresa .mensaje {
+  background: #c1121f;
+  border-radius: 20px;
+  padding: 25px;
+  max-width: 420px;
+  font-size: 1.2em;
+  line-height: 1.5;
+  box-shadow: 0 0 30px rgba(255,255,255,0.3);
+}
+
+#sorpresa span {
+  font-size: 2em;
+  display: block;
+  margin-bottom: 10px;
 }
 </style>
 </head>
 
-<body onclick="showSurprise()">
+<body onclick="mostrarSorpresa()">
 
-<div class="container">
-    <img src="foto.jpeg" alt="Foto" class="photo">
-    <div class="tap">✨ Toca la pantalla ✨</div>
-</div>
-
-<audio id="music" loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-christmas.mp3" type="audio/mpeg">
+<!-- Música navideña -->
+<audio id="musica" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-christmas.mp3" type="audio/mpeg">
 </audio>
 
+<div class="container">
+  <h1>🎄 Feliz Navidad, mi amorsito ❤️</h1>
+
+  <p>
+    Toca la pantalla…<br>
+    tengo algo especial para ti ✨
+  </p>
+
+  <!-- IMAGEN JPEG -->
+  <img src="foto.jpeg" alt="Nosotros">
+
+  <div class="footer">
+    <p class="heart">💖 Siempre tú 💖</p>
+  </div>
+</div>
+
+<!-- Mensaje sorpresa -->
+<div id="sorpresa" onclick="cerrarSorpresa()">
+  <div class="mensaje">
+    <span>🎁❤️</span>
+    Mi chiquita presiosa, te deseo una feliz Navidad 🎄<br><br>
+    Recuerda siempre que.. Te amo muchisimooo 💖<br><br>
+    Mi princesa de lindos ojitos ✨
+  </div>
+</div>
+
+<!-- Nieve -->
+<canvas class="snow" id="snow"></canvas>
+
 <script>
-function showSurprise() {
-    alert("🎄❤️ Mi chiquita presiosa te deseo una feliz Navidad\n\nRecuerda siempre que te amo muchisimooo mi princesa de lindos ojitos 💖");
-    document.getElementById("music").play();
+let yaMostro = false;
+
+function mostrarSorpresa() {
+  if (!yaMostro) {
+    document.getElementById("sorpresa").style.display = "flex";
+    document.getElementById("musica").play();
+    yaMostro = true;
+  }
 }
 
-// nieve
-for (let i = 0; i < 40; i++) {
-    let snow = document.createElement("div");
-    snow.className = "snow";
-    snow.innerHTML = "❄";
-    snow.style.left = Math.random() * 100 + "vw";
-    snow.style.animationDuration = (Math.random() * 3 + 2) + "s";
-    snow.style.fontSize = (Math.random() * 10 + 10) + "px";
-    document.body.appendChild(snow);
+function cerrarSorpresa() {
+  document.getElementById("sorpresa").style.display = "none";
 }
+
+// Nieve animada
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let flakes = [];
+
+for (let i = 0; i < 100; i++) {
+  flakes.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 4 + 1,
+    d: Math.random() + 1
+  });
+}
+
+function drawSnow() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+
+  for (let i = 0; i < flakes.length; i++) {
+    let f = flakes[i];
+    ctx.moveTo(f.x, f.y);
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+  }
+
+  ctx.fill();
+  moveSnow();
+}
+
+let angle = 0;
+
+function moveSnow() {
+  angle += 0.01;
+  for (let i = 0; i < flakes.length; i++) {
+    let f = flakes[i];
+    f.y += Math.pow(f.d, 2) + 1;
+    f.x += Math.sin(angle) * 0.5;
+
+    if (f.y > canvas.height) {
+      flakes[i] = {
+        x: Math.random() * canvas.width,
+        y: 0,
+        r: f.r,
+        d: f.d
+      };
+    }
+  }
+}
+
+setInterval(drawSnow, 33);
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
 
 </body>
 </html>
-
